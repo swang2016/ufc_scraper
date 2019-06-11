@@ -7,25 +7,27 @@ Additionally, the `scripts` folder contains a file called `ufc_scraper.py` which
 ### Usage Examples
 
 #### Getting UFC Fight and Fighter Details
-Initial fight stats pull:
+
+##### Initial fight stats pull:
 
 `fight_hist = get_all_fight_stats()`
 
-Initial fighter details pull:
+##### Initial fighter details pull:
 
 `fighter_details = get_fighter_details(fight_hist.fighter_url.unique())`
 
 where `fight_hist` is a dataframe of fight statistics and `fighter_url` being a column of urls linking to individual fighter pages.
 
 #### Updating UFC Fight and Fighter Stats
-Updating fight stats:
+
+##### Updating fight stats:
 
 `fight_hist_updated = update_fight_stats(fight_hist)`
 
 where `fight_hist` is a dataframe of already saved fight statistics. `fight_hist_updated` will be a dataframe of updated fight stats up to the most recent UFC card.
 
-Updating fighter statistics:
+##### Updating fighter statistics:
 
 `fighter_stats_updated = update_fighter_details(fight_hist_updated.fighter_url.unique(), fighter_stats)`
 
-where `fight_hist_updated` is a dataframe of updated fight stats and `fighter_url` being a column of urls linking to individual fighter pages. `fighter_stats` is a dataframe of already saved fighter details. `fighter_stats_updated` will be an updated dataframe of fighter details for all fighters who have made an appearance in the UFC
+where `fight_hist_updated` is a dataframe of updated fight stats and `fighter_url` being a column of urls linking to individual fighter pages. `fighter_stats` is a dataframe of already saved fighter details. `fighter_stats_updated` will be an updated dataframe of fighter details for all fighters who have made an appearance in the UFC.
