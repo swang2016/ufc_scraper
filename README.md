@@ -2,7 +2,7 @@
 This project scrapes fight statistics and fighter details from ufcstats.com for all historical UFC events. The `data` folder contains two csv files, `fight_hist.csv` and `fighter_stats.csv`, data for all fights and fighters recent as of 06/08/2019 (UFC 238).
 
 ## Scripts
-Additionally, the `scripts` folder contains a file called `ufc_scraper.py` which has functions used to both do the initial scraping and functions used to update the data as new UFC events occur.
+Additionally, the `scripts` folder contains a file called `ufc_scraper.py` which has functions used for both the initial scraping and functions used to update the data as new UFC events occur.
 
 ### Usage Examples
 
