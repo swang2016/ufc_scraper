@@ -5,6 +5,7 @@ This project scrapes fight statistics and fighter details from ufcstats.com for 
 Additionally, the `scripts` folder contains a file called `ufc_scraper.py` which has functions used for both the initial scraping and functions used to update the data as new UFC events occur.
 
 ### Usage Examples
+Usage examples can also be found in the notebook `scrape_fights.ipynb` in the `scripts` folder.
 
 #### Getting UFC Fight and Fighter Details
 
