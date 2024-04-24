@@ -7,7 +7,15 @@ from datetime import datetime, timedelta
 
 #function for getting individual fight stats
 def get_fight_stats(url, timeout=30):
-    page = requests.get(url, timeout=timeout)
+    attempts = 1
+    data_pulled = False
+    while attempts <=3 or not data_pulled:
+        try:
+            page = requests.get(url, timeout=timeout)
+            data_pulled = True
+        except Exception as e:
+            print(f'failed getting fight stats for {url} on attempt {attempts} with error {e}')
+            attempts += 1
     soup = BeautifulSoup(page.content, "html.parser")
     fd_columns = {'fighter':[], 'knockdowns':[],'sig_strikes':[], 'total_strikes':[], 'takedowns':[], 'sub_attempts':[], 'pass':[],
                    'reversals':[]}
@@ -153,15 +161,7 @@ def get_fight_card(url, timeout=30):
 
         fight_det = pd.DataFrame(fight_det)
         #get striking details (with retries)
-        attempts = 1
-        data_pulled = False
-        while attempts <=3 or not data_pulled:
-            try:
-                str_det = get_fight_stats(fight_url)
-                data_pulled = True
-            except Exception as e:
-                print(f'failed getting fight stats for {fight_url} on attempt {attempts}')
-                attempts += 1
+        str_det = get_fight_stats(fight_url)
         if str_det is None:
             pass
         else:
