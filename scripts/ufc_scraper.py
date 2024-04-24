@@ -6,8 +6,8 @@ import re
 from datetime import datetime, timedelta
 
 #function for getting individual fight stats
-def get_fight_stats(url):
-    page = requests.get(url)
+def get_fight_stats(url, timeout=30):
+    page = requests.get(url, timeout=timeout)
     soup = BeautifulSoup(page.content, "html.parser")
     fd_columns = {'fighter':[], 'knockdowns':[],'sig_strikes':[], 'total_strikes':[], 'takedowns':[], 'sub_attempts':[], 'pass':[],
                    'reversals':[]}
@@ -100,8 +100,8 @@ def get_fight_stats(url):
         return(cfd)
 
 #function for getting fight stats for all fights on a card
-def get_fight_card(url):
-    page = requests.get(url)
+def get_fight_card(url, timeout=30):
+    page = requests.get(url, timeout=timeout)
     soup = BeautifulSoup(page.content, "html.parser")
     
     fight_card = pd.DataFrame()
@@ -165,9 +165,9 @@ def get_fight_card(url):
     return fight_card
 
 #function that gets stats on all fights on all cards
-def get_all_fight_stats():
+def get_all_fight_stats(timeout=30):
     url = 'http://ufcstats.com/statistics/events/completed?page=all'
-    page = requests.get(url)
+    page = requests.get(url, timeout=timeout)
     soup = BeautifulSoup(page.content, "html.parser") 
 
     events_table = soup.select_one('tbody')
@@ -176,19 +176,19 @@ def get_all_fight_stats():
     fight_stats = pd.DataFrame()
     for event in events:
         print(event)
-        stats = get_fight_card(event)
+        stats = get_fight_card(event, timeout=timeout)
         fight_stats = pd.concat([fight_stats, stats], axis = 0)
         
     fight_stats = fight_stats.reset_index(drop = True)
     return fight_stats      
 
 #gets individual fighter attributes
-def get_fighter_details(fighter_urls):
+def get_fighter_details(fighter_urls, timeout = 30):
     fighter_details = {'name':[], 'height':[], 'reach':[], 'stance':[], 'dob':[], 'url':[]}
 
     for f_url in fighter_urls:
         print(f_url)
-        page = requests.get(f_url)
+        page = requests.get(f_url, timeout=timeout)
         soup = BeautifulSoup(page.content, "html.parser")
 
         fighter_name = soup.find('span', class_ = 'b-content__title-highlight').text.strip()
@@ -212,9 +212,9 @@ def get_fighter_details(fighter_urls):
     return pd.DataFrame(fighter_details)  
 
 #updates fight stats with newer fights
-def update_fight_stats(old_stats): #takes dataframe of fight stats as input
+def update_fight_stats(old_stats, timeout=30): #takes dataframe of fight stats as input
     url = 'http://ufcstats.com/statistics/events/completed?page=all'
-    page = requests.get(url)
+    page = requests.get(url, timeout=timeout)
     soup = BeautifulSoup(page.content, "html.parser") 
 
     events_table = soup.select_one('tbody')
@@ -227,7 +227,7 @@ def update_fight_stats(old_stats): #takes dataframe of fight stats as input
             break
         else:
             print(event)
-            stats = get_fight_card(event)
+            stats = get_fight_card(event, timeout=timeout)
             new_stats = pd.concat([new_stats, stats], axis = 0)
     
     updated_stats = pd.concat([new_stats, old_stats], axis = 0)
@@ -235,7 +235,7 @@ def update_fight_stats(old_stats): #takes dataframe of fight stats as input
     return(updated_stats)
 
 #updates fighter attributes with new fighters not yet saved yet
-def update_fighter_details(fighter_urls, saved_fighters):
+def update_fighter_details(fighter_urls, saved_fighters, timeout=30):
     fighter_details = {'name':[], 'height':[], 'reach':[], 'stance':[], 'dob':[], 'url':[]}
     fighter_urls = set(fighter_urls)
     saved_fighter_urls = set(saved_fighters.url.unique())
@@ -245,7 +245,7 @@ def update_fighter_details(fighter_urls, saved_fighters):
             pass
         else:
             print('adding new fighter:', f_url)
-            page = requests.get(f_url)
+            page = requests.get(f_url, timeout=timeout)
             soup = BeautifulSoup(page.content, "html.parser")
 
             fighter_name = soup.find('span', class_ = 'b-content__title-highlight').text.strip()
