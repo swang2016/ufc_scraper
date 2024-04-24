@@ -152,8 +152,16 @@ def get_fight_card(url, timeout=30):
                 fight_det['time'] += [time, time]
 
         fight_det = pd.DataFrame(fight_det)
-        #get striking details
-        str_det = get_fight_stats(fight_url)
+        #get striking details (with retries)
+        attempts = 1
+        data_pulled = False
+        while attempts <=3 or not data_pulled:
+            try:
+                str_det = get_fight_stats(fight_url)
+                data_pulled = True
+            except Exception as e:
+                print(f'failed getting fight stats for {fight_url} on attempt {attempts}')
+                attempts += 1
         if str_det is None:
             pass
         else:
