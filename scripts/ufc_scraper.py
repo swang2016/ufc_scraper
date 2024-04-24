@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from datetime import datetime, timedelta
+import logging
 
 #function for getting individual fight stats
 def get_fight_stats(url, timeout=30):
@@ -14,7 +15,7 @@ def get_fight_stats(url, timeout=30):
             page = requests.get(url, timeout=timeout)
             data_pulled = True
         except Exception as e:
-            print(f'failed getting fight stats for {url} on attempt {attempts} with error {e}')
+            logging.warning(f'failed getting fight stats for {url} on attempt {attempts} with error {e}')
             attempts += 1
     soup = BeautifulSoup(page.content, "html.parser")
     fd_columns = {'fighter':[], 'knockdowns':[],'sig_strikes':[], 'total_strikes':[], 'takedowns':[], 'sub_attempts':[], 'pass':[],
