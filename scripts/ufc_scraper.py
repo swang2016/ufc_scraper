@@ -8,9 +8,10 @@ import logging
 
 #function for getting individual fight stats
 def get_fight_stats(url, timeout=30):
+    timeout = 10
     attempts = 1
     data_pulled = False
-    while attempts <=3 or not data_pulled:
+    while attempts <=3 and not data_pulled:
         try:
             page = requests.get(url, timeout=timeout)
             data_pulled = True
@@ -18,14 +19,15 @@ def get_fight_stats(url, timeout=30):
             logging.warning(f'failed getting fight stats for {url} on attempt {attempts} with error {e}')
             attempts += 1
     soup = BeautifulSoup(page.content, "html.parser")
-    fd_columns = {'fighter':[], 'knockdowns':[],'sig_strikes':[], 'total_strikes':[], 'takedowns':[], 'sub_attempts':[], 'pass':[],
-                   'reversals':[]}
-    
+    fd_columns = {'fighter':[], 'knockdowns':[],'sig_strikes':[], 'total_strikes':[], 'takedowns':[], 'sub_attempts':[], 'reversals':[],
+                    'control_time':[]}
+
     #gets overall fight details
+
     fight_details = soup.select_one('tbody.b-fight-details__table-body')
     if fight_details == None:
         print('missing fight details for:', url)
-        return None
+        # return None
     else:
         fd_cols = fight_details.select('td.b-fight-details__table-col')
         for i in range(len(fd_cols)):
@@ -48,16 +50,16 @@ def get_fight_stats(url, timeout=30):
                         fd_columns['takedowns'].append(data)
                     elif i == 7: # add to sub attempts
                         fd_columns['sub_attempts'].append(data)
-                    elif i == 8: # add to passes
-                        fd_columns['pass'].append(data)
-                    elif i == 9: # add to reversals
+                    elif i == 8: # add to reversals
                         fd_columns['reversals'].append(data)
+                    elif i == 9: # add to control time
+                        fd_columns['control_time'].append(data)
         ov_details = pd.DataFrame(fd_columns)
 
         #get sig strike details
         sig_strike_details = soup.find('p', class_ = 'b-fight-details__collapse-link_tot',text = re.compile('Significant Strikes')).find_next('tbody', class_ = 'b-fight-details__table-body')
         sig_columns = {'fighter':[], 'head_strikes':[], 'body_strikes':[],'leg_strikes':[], 'distance_strikes':[],
-                   'clinch_strikes':[], 'ground_strikes':[]}
+                    'clinch_strikes':[], 'ground_strikes':[]}
         fd_cols = sig_strike_details.select('td.b-fight-details__table-col')
         for i in range(len(fd_cols)):
             #skip 1, 2 (sig strikes, sig %)
