@@ -1,7 +1,9 @@
 # UFC Scraper
-This project scrapes fight statistics and fighter details from ufcstats.com for all historical UFC events. The `data` folder contains two csv files, `fight_hist.csv` and `fighter_stats.csv`, data for all fights and fighters recent as of 09/14/2019 (UFC Fight Night 158).
+This project scrapes fight statistics and fighter details from ufcstats.com for all historical UFC events. The `data` folder contains two csv files, `fight_hist.csv` and `fighter_stats.csv`, data for all fights and fighters recent as of 04/13/2024 (UFC Fight 300).
 
 A writeup of an analysis done with this data and Neo4j can be found here: https://towardsdatascience.com/ranking-the-best-ufc-fighters-using-pagerank-and-neo4j-5385805b4515
+
+An updated version of the analysis using new data and Networkx can be found in the `analysis` folder.
 
 All code used in the writeup above is in the `analysis` folder.
 
